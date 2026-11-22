@@ -20,6 +20,25 @@ jobs:
       - name: Fix missing import
         run: sed -i '/^package /a import io.livekit.android.events.collect' project/app/src/main/java/com/esrafil/voicecall/CallManager.kt
 
+      - name: Icon, label and server
+        run: |
+          ICON=""
+          if [ -f esycall-icon.png ]; then ICON=esycall-icon.png; fi
+          if [ -f icon.png ]; then ICON=icon.png; fi
+          if [ -n "$ICON" ]; then
+            for d in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+              mkdir -p "project/app/src/main/res/mipmap-$d"
+              cp "$ICON" "project/app/src/main/res/mipmap-$d/ic_launcher.png"
+              cp "$ICON" "project/app/src/main/res/mipmap-$d/ic_launcher_round.png"
+            done
+            sed -i 's|android:icon="@android:drawable/sym_action_call"|android:icon="@mipmap/ic_launcher"|' project/app/src/main/AndroidManifest.xml
+            echo "ICON APPLIED: $ICON"
+          else
+            echo "ICON NOT FOUND IN REPO"
+          fi
+          sed -i 's|android:label="[^"]*"|android:label="esy call"|' project/app/src/main/AndroidManifest.xml
+          sed -i 's|prefs\.getString("server", "") ?: ""|"https://shrill-wave-0b90.esrafilnazeri.workers.dev"|g' project/app/src/main/java/com/esrafil/voicecall/MainActivity.kt
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -32,21 +51,12 @@ jobs:
       - name: Build
         working-directory: project
         run: |
-          echo "=== FILES ==="
-          find app/src -type f | sort
-          echo "=== GREP SERVER ==="
-          grep -rn -i "server" app/src/main || true
-          echo "=== MANIFEST ==="
-          cat app/src/main/AndroidManifest.xml
-          echo "=== GRADLE ==="
-          cat app/build.gradle
-          cat gradle/libs.versions.toml 2>/dev/null || true
-          echo "=== VALUES ==="
-          for f in app/src/main/res/values/*.xml; do echo "----- $f -----"; cat "$f"; done
-          echo "=== LAYOUTS ==="
-          for f in app/src/main/res/layout/*.xml; do echo "----- $f -----"; cat "$f"; done
-          echo "=== CODE ==="
-          for f in app/src/main/java/com/esrafil/voicecall/*.kt; do case "$f" in *CallManager.kt) ;; *) echo "----- $f -----"; cat "$f";; esac; done
+          echo "=== STRINGS ==="
+          cat app/src/main/res/values/strings.xml
+          echo "=== MAINACTIVITY ==="
+          cat app/src/main/java/com/esrafil/voicecall/MainActivity.kt
+          echo "=== CALLMANAGER ==="
+          cat app/src/main/java/com/esrafil/voicecall/CallManager.kt
           echo "=== BUILD ==="
           gradle assembleDebug --no-daemon
 
