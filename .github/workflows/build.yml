@@ -31,7 +31,24 @@ jobs:
 
       - name: Build
         working-directory: project
-        run: gradle assembleDebug --no-daemon
+        run: |
+          echo "=== FILES ==="
+          find app/src -type f | sort
+          echo "=== GREP SERVER ==="
+          grep -rn -i "server" app/src/main || true
+          echo "=== MANIFEST ==="
+          cat app/src/main/AndroidManifest.xml
+          echo "=== GRADLE ==="
+          cat app/build.gradle
+          cat gradle/libs.versions.toml 2>/dev/null || true
+          echo "=== VALUES ==="
+          for f in app/src/main/res/values/*.xml; do echo "----- $f -----"; cat "$f"; done
+          echo "=== LAYOUTS ==="
+          for f in app/src/main/res/layout/*.xml; do echo "----- $f -----"; cat "$f"; done
+          echo "=== CODE ==="
+          for f in app/src/main/java/com/esrafil/voicecall/*.kt; do case "$f" in *CallManager.kt) ;; *) echo "----- $f -----"; cat "$f";; esac; done
+          echo "=== BUILD ==="
+          gradle assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
