@@ -1,0 +1,30 @@
+name: Build APK
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unzip project
+        run: unzip -o app.zip -d project
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Build
+        working-directory: project
+        run: gradle assembleDebug --no-daemon --stacktrace
+      - name: Publish APK
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cp project/app/build/outputs/apk/debug/app-debug.apk VoiceCall.apk
+          gh release create "build-${{ github.run_number }}" VoiceCall.apk --title "VoiceCall build ${{ github.run_number }}" --notes "APK"
