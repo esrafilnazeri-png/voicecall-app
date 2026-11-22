@@ -26,8 +26,9 @@ jobs:
           cp "$SRC" "$SRC.orig"
           UI=""
           if [ -f new-ui.kt ]; then UI=new-ui.kt; fi
-          if [ -f MainActivity.kt ]; then UI=MainActivity.kt; fi
-          if [ -n "$UI" ]; then
+          if [ -z "$UI" ]; then UI=$(ls *.kt 2>/dev/null | grep -i "new-ui" | head -1); fi
+          if [ -z "$UI" ]; then UI=$(ls *.kt 2>/dev/null | grep -i "mainactivity" | head -1); fi
+          if [ -n "$UI" ] && [ -f "$UI" ]; then
             cp "$UI" "$SRC"
             echo "CUSTOM UI APPLIED: $UI"
           else
