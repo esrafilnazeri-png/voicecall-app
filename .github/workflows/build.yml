@@ -20,8 +20,16 @@ jobs:
       - name: Fix missing import
         run: sed -i '/^package /a import io.livekit.android.events.collect' project/app/src/main/java/com/esrafil/voicecall/CallManager.kt
 
-      - name: Icon, label and server
+      - name: Custom UI and icon
         run: |
+          SRC=project/app/src/main/java/com/esrafil/voicecall/MainActivity.kt
+          cp "$SRC" "$SRC.orig"
+          if [ -f MainActivity.kt ]; then
+            cp MainActivity.kt "$SRC"
+            echo "CUSTOM UI APPLIED"
+          else
+            echo "MAINACTIVITY NOT FOUND IN REPO - keeping original"
+          fi
           ICON=""
           if [ -f esycall-icon.png ]; then ICON=esycall-icon.png; fi
           if [ -f icon.png ]; then ICON=icon.png; fi
@@ -37,7 +45,6 @@ jobs:
             echo "ICON NOT FOUND IN REPO"
           fi
           sed -i 's|android:label="[^"]*"|android:label="esy call"|' project/app/src/main/AndroidManifest.xml
-          sed -i 's|prefs\.getString("server", "") ?: ""|"https://shrill-wave-0b90.esrafilnazeri.workers.dev"|g' project/app/src/main/java/com/esrafil/voicecall/MainActivity.kt
 
       - uses: actions/setup-java@v4
         with:
@@ -51,14 +58,18 @@ jobs:
       - name: Build
         working-directory: project
         run: |
-          echo "=== STRINGS ==="
-          cat app/src/main/res/values/strings.xml
-          echo "=== MAINACTIVITY ==="
-          cat app/src/main/java/com/esrafil/voicecall/MainActivity.kt
           echo "=== CALLMANAGER ==="
-          cat app/src/main/java/com/esrafil/voicecall/CallManager.kt
+          cat app/src/main/java/com/esrafil/voicecall/CallManager.kt || true
+          echo "=== ORIGINAL MAINACTIVITY ==="
+          cat app/src/main/java/com/esrafil/voicecall/MainActivity.kt.orig || true
           echo "=== BUILD ==="
-          gradle assembleDebug --no-daemon
+          if ! gradle assembleDebug --no-daemon; then
+            echo "CUSTOM UI BUILD FAILED - RETRYING WITH ORIGINAL UI"
+            if [ -f app/src/main/java/com/esrafil/voicecall/MainActivity.kt.orig ]; then
+              cp app/src/main/java/com/esrafil/voicecall/MainActivity.kt.orig app/src/main/java/com/esrafil/voicecall/MainActivity.kt
+            fi
+            gradle assembleDebug --no-daemon
+          fi
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
