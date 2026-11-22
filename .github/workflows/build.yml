@@ -18,7 +18,7 @@ jobs:
         run: unzip -o app.zip -d project
 
       - name: Fix missing import
-        run: sed -i '/^package /a import kotlinx.coroutines.flow.collect' project/app/src/main/java/com/esrafil/voicecall/CallManager.kt
+        run: sed -i '/^package /a import io.livekit.android.events.collect' project/app/src/main/java/com/esrafil/voicecall/CallManager.kt
 
       - uses: actions/setup-java@v4
         with:
@@ -31,12 +31,7 @@ jobs:
 
       - name: Build
         working-directory: project
-        run: |
-          echo "===== IMPORTS ====="
-          sed -n '1,30p' app/src/main/java/com/esrafil/voicecall/CallManager.kt
-          echo "===== AROUND LINE 50 ====="
-          sed -n '40,60p' app/src/main/java/com/esrafil/voicecall/CallManager.kt
-          gradle assembleDebug --no-daemon --stacktrace
+        run: gradle assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
