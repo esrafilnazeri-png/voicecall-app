@@ -24,12 +24,16 @@ jobs:
         run: |
           SRC=project/app/src/main/java/com/esrafil/voicecall/MainActivity.kt
           cp "$SRC" "$SRC.orig"
-          if [ -f MainActivity.kt ]; then
-            cp MainActivity.kt "$SRC"
-            echo "CUSTOM UI APPLIED"
+          UI=""
+          if [ -f new-ui.kt ]; then UI=new-ui.kt; fi
+          if [ -f MainActivity.kt ]; then UI=MainActivity.kt; fi
+          if [ -n "$UI" ]; then
+            cp "$UI" "$SRC"
+            echo "CUSTOM UI APPLIED: $UI"
           else
-            echo "MAINACTIVITY NOT FOUND IN REPO - keeping original"
+            echo "UI FILE NOT FOUND IN REPO - keeping original"
           fi
+          sed -i 's|<uses-permission android:name="android.permission.INTERNET" />|<uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.VIBRATE" />|' project/app/src/main/AndroidManifest.xml
           ICON=""
           if [ -f esycall-icon.png ]; then ICON=esycall-icon.png; fi
           if [ -f icon.png ]; then ICON=icon.png; fi
@@ -58,10 +62,6 @@ jobs:
       - name: Build
         working-directory: project
         run: |
-          echo "=== CALLMANAGER ==="
-          cat app/src/main/java/com/esrafil/voicecall/CallManager.kt || true
-          echo "=== ORIGINAL MAINACTIVITY ==="
-          cat app/src/main/java/com/esrafil/voicecall/MainActivity.kt.orig || true
           echo "=== BUILD ==="
           if ! gradle assembleDebug --no-daemon; then
             echo "CUSTOM UI BUILD FAILED - RETRYING WITH ORIGINAL UI"
