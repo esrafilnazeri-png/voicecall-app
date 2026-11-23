@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
@@ -14,27 +14,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check uploaded app-ui.kt
+        run: |
+          if [ ! -f app-ui.kt ]; then
+            echo "::error::فایل app-ui.kt در ریشه ریپو پیدا نشد — اول اون رو آپلود کن"
+            exit 1
+          fi
+          if ! grep -q "END_OF_ESYCALL_UI" app-ui.kt; then
+            echo "::error::فایل app-ui.kt ناقص آپلود شده (paste بریده شده) — دوباره کامل paste کن"
+            exit 1
+          fi
+          VER=$(grep -o "نسخه [۰-۹]*" app-ui.kt | head -1)
+          LINES=$(wc -l < app-ui.kt)
+          echo "VERSION=$VER LINES=$LINES"
+          echo "## نسخه بیلد شده: $VER ($LINES خط)" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Unzip project
         run: unzip -o app.zip -d project
 
-      - name: Fix missing import
-        run: sed -i '/^package /a import io.livekit.android.events.collect' project/app/src/main/java/com/esrafil/voicecall/CallManager.kt
-
-      - name: Custom UI and icon
+      - name: Put new UI + fix import
         run: |
-          SRC=project/app/src/main/java/com/esrafil/voicecall/MainActivity.kt
-          cp "$SRC" "$SRC.orig"
-          UI=""
-          if [ -f app-ui.kt ]; then UI=app-ui.kt; fi
-          if [ -z "$UI" ]; then UI=$(ls *.kt 2>/dev/null | grep -i "app-ui" | head -1); fi
-          if [ -z "$UI" ]; then UI=$(ls *.kt 2>/dev/null | grep -i "chat-ui" | head -1); fi
-          if [ -z "$UI" ]; then UI=$(ls *.kt 2>/dev/null | grep -i "new-ui" | tail -1); fi
-          if [ -n "$UI" ] && [ -f "$UI" ]; then
-            cp "$UI" "$SRC"
-            echo "CUSTOM UI APPLIED: $UI"
-          else
-            echo "UI FILE NOT FOUND IN REPO - keeping original"
-          fi
+          cp app-ui.kt project/app/src/main/java/com/esrafil/voicecall/MainActivity.kt
+          sed -i '/^package /a import io.livekit.android.events.collect' project/app/src/main/java/com/esrafil/voicecall/CallManager.kt
+
+      - name: Icon + label + permissions
+        run: |
           sed -i 's|<uses-permission android:name="android.permission.INTERNET" />|<uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.VIBRATE" />|' project/app/src/main/AndroidManifest.xml
           ICON=""
           if [ -f esycall-icon.png ]; then ICON=esycall-icon.png; fi
@@ -47,8 +51,6 @@ jobs:
             done
             sed -i 's|android:icon="@android:drawable/sym_action_call"|android:icon="@mipmap/ic_launcher"|' project/app/src/main/AndroidManifest.xml
             echo "ICON APPLIED: $ICON"
-          else
-            echo "ICON NOT FOUND IN REPO"
           fi
           sed -i 's|android:label="[^"]*"|android:label="esy call"|' project/app/src/main/AndroidManifest.xml
 
@@ -61,20 +63,12 @@ jobs:
         with:
           gradle-version: "8.9"
 
-      - name: Build
+      - name: Build APK
         working-directory: project
-        run: |
-          echo "=== BUILD ==="
-          if ! gradle assembleDebug --no-daemon; then
-            echo "CUSTOM UI BUILD FAILED - RETRYING WITH ORIGINAL UI"
-            if [ -f app/src/main/java/com/esrafil/voicecall/MainActivity.kt.orig ]; then
-              cp app/src/main/java/com/esrafil/voicecall/MainActivity.kt.orig app/src/main/java/com/esrafil/voicecall/MainActivity.kt
-            fi
-            gradle assembleDebug --no-daemon
-          fi
+        run: gradle assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
+          name: esy-call-apk
           path: project/app/build/outputs/apk/debug/app-debug.apk
