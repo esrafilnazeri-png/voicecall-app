@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>esy call — تماس صوتی گیمینگ</title>
+<meta name="description" content="esy call — برنامه تماس صوتی گیمینگ، اتاق خصوصی، چت زنده. رایگان و امن.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%2305070F'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%2300FFA3' stroke-width='7'/%3E%3Ccircle cx='50' cy='50' r='12' fill='%2300C2FF'/%3E%3C/svg%3E">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--g1:#00FFA3;--g2:#00C2FF;--bg:#05070F;--card:#0C1226;--txt:#EAF2FF;--mut:#8FA3C8;
+}
+html{scroll-behavior:smooth}
+body{
+background:
+radial-gradient(1000px 500px at 85% -10%, rgba(0,255,163,.09), transparent 60%),
+radial-gradient(900px 500px at 10% 110%, rgba(0,194,255,.08), transparent 60%),
+var(--bg);
+color:var(--txt);
+font-family:Tahoma,"Segoe UI",system-ui,sans-serif;
+overflow-x:hidden;
+}
+.g{background:linear-gradient(90deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.container{max-width:1100px;margin:0 auto;padding:0 22px}
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(5,7,15,.75);border-bottom:1px solid rgba(0,255,163,.15)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
+.logo{display:flex;align-items:center;gap:10px;font-size:21px;font-weight:900;letter-spacing:.5px}
+.logo .ring{width:34px;height:34px;border-radius:50%;border:3px solid var(--g1);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(0,255,163,.5)}
+.logo .ring i{width:12px;height:12px;border-radius:50%;background:var(--g2);display:block}
+.nav-links{display:flex;gap:26px;align-items:center}
+.nav-links a{color:var(--mut);text-decoration:none;font-size:14px;font-weight:700;transition:.2s}
+.nav-links a:hover{color:var(--g1)}
+.btn{
+display:inline-flex;align-items:center;gap:9px;padding:14px 28px;border-radius:16px;
+font-size:15px;font-weight:900;text-decoration:none;cursor:pointer;border:none;transition:.25s;
+}
+.btn-main{background:linear-gradient(90deg,var(--g1),var(--g2));color:#04121A;box-shadow:0 6px 32px rgba(0,255,163,.35)}
+.btn-main:hover{transform:translateY(-3px);box-shadow:0 12px 44px rgba(0,255,163,.5)}
+.btn-ghost{background:rgba(255,255,255,.05);color:var(--txt);border:1.6px solid rgba(0,194,255,.4)}
+.btn-ghost:hover{border-color:var(--g2);transform:translateY(-3px)}
+.hero{padding:90px 0 70px;text-align:center;position:relative}
+.hero h1{font-size:clamp(34px,6.5vw,62px);font-weight:900;line-height:1.35;letter-spacing:.5px}
+.hero h1 .en{font-family:"Segoe UI",system-ui;letter-spacing:2px}
+.hero p.sub{margin:22px auto 0;max-width:620px;font-size:clamp(15px,2.6vw,19px);color:var(--mut);line-height:2.1}
+.hero-cta{margin-top:38px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.badges{margin-top:26px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.badge{padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:800;border:1.3px solid rgba(0,255,163,.35);color:var(--g1);background:rgba(0,255,163,.07)}
+/* phone mock */
+.phone-wrap{margin:60px auto 0;width:290px;position:relative;animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.phone{
+border-radius:42px;border:2.5px solid rgba(0,255,163,.4);
+background:linear-gradient(165deg,#0B1226,#05070F);
+padding:18px 16px 22px;box-shadow:0 30px 90px rgba(0,255,163,.22),inset 0 0 40px rgba(0,194,255,.06);
+}
+.p-notch{width:90px;height:22px;border-radius:14px;background:#0A0F1E;margin:0 auto 18px;border:1px solid rgba(255,255,255,.07)}
+.p-card{border-radius:18px;background:rgba(12,18,38,.9);border:1.4px solid rgba(0,194,255,.28);padding:14px;margin-bottom:12px}
+.p-row{display:flex;align-items:center;gap:10px}
+.p-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--g1),var(--g2));flex:none}
+.p-line{height:9px;border-radius:8px;background:rgba(255,255,255,.12);margin:7px 0}
+.p-mic{width:120px;height:120px;border-radius:50%;margin:18px auto 8px;border:4px solid var(--g1);display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 0 50px rgba(0,255,163,.45)}
+.p-mic::after{content:"";position:absolute;inset:-16px;border-radius:50%;border:2.5px solid rgba(0,255,163,.28);animation:pulse 2.2s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.85);opacity:.9}100%{transform:scale(1.35);opacity:0}}
+.p-mic svg{width:46px;height:46px;fill:var(--g2)}
+.p-btns{display:flex;justify-content:center;gap:14px;margin-top:16px}
+.p-btn{width:52px;height:52px;border-radius:50%;background:#12204A;border:1.6px solid rgba(0,194,255,.5);display:flex;align-items:center;justify-content:center;font-size:20px}
+.p-btn.end{background:linear-gradient(135deg,#FF5B5B,#D32F2F);border-color:#FF8A80}
+/* sections */
+section{padding:80px 0}
+.sec-title{text-align:center;font-size:clamp(25px,4.5vw,38px);font-weight:900;margin-bottom:14px}
+.sec-sub{text-align:center;color:var(--mut);font-size:16px;margin-bottom:52px;line-height:2}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.f-card{
+border-radius:22px;padding:30px 26px;background:linear-gradient(160deg,var(--card),#080D1C);
+border:1.5px solid rgba(0,255,163,.18);transition:.3s;position:relative;overflow:hidden;
+}
+.f-card:hover{transform:translateY(-7px);border-color:rgba(0,255,163,.55);box-shadow:0 18px 50px rgba(0,255,163,.16)}
+.f-card::before{content:"";position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--g1),var(--g2))}
+.f-ico{width:58px;height:58px;border-radius:16px;background:rgba(0,255,163,.1);border:1.5px solid rgba(0,255,163,.35);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.f-ico svg{width:28px;height:28px;stroke:var(--g1);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.f-card h3{font-size:18.5px;font-weight:900;margin-bottom:10px}
+.f-card p{color:var(--mut);font-size:14px;line-height:2.1}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;counter-reset:s}
+.step{border-radius:20px;padding:30px 24px;background:rgba(12,18,38,.7);border:1.5px solid rgba(0,194,255,.2);text-align:center}
+.step .num{width:52px;height:52px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;background:linear-gradient(135deg,var(--g1),var(--g2));color:#04121A;box-shadow:0 0 26px rgba(0,255,163,.4)}
+.step h4{font-size:17px;margin-bottom:9px;font-weight:900}
+.step p{color:var(--mut);font-size:13.5px;line-height:2}
+/* download */
+.dl-\boxed{
+border-radius:30px;padding:clamp(36px,6vw,64px);text-align:center;
+background:linear-gradient(140deg,rgba(0,255,163,.12),rgba(0,194,255,.1));
+border:2px solid rgba(0,255,163,.4);box-shadow:0 24px 80px rgba(0,255,163,.15);
+}
+.dl-box h2{font-size:clamp(24px,4.5vw,36px);font-weight:900;margin-bottom:14px}
+.dl-box p{color:var(--mut);margin-bottom:30px;font-size:15.5px;line-height:2}
+/* faq */
+.faq-item{border-radius:18px;background:rgba(12,18,38,.7);border:1.4px solid rgba(0,194,255,.2);margin-bottom:13px;overflow:hidden}
+.faq-q{padding:20px 24px;font-weight:900;font-size:15.5px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.faq-q span.pm{color:var(--g1);font-size:21px;transition:.3s}
+.faq-item.open .pm{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:.35s;color:var(--mut);line-height:2.2;font-size:14px;padding:0 24px}
+.faq-item.open .faq-a{max-height:220px;padding:0 24px 20px}
+footer{border-top:1px solid rgba(0,255,163,.15);padding:40px 0;text-align:center;color:var(--mut);font-size:13px;line-height:2.3}
+footer .fl{display:flex;gap:22px;justify-content:center;margin:14px 0}
+footer a{color:var(--g2);text-decoration:none;font-weight:800}
+@media(max-width:640px){.nav-links a:not(.btn){display:none}.hero{padding:60px 0 40px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container nav-in">
+    <div class="logo"><span class="ring"><i></i></span><span class="g">esy call</span></div>
+    <div class="nav-links">
+      <a href="#features">امکانات</a>
+      <a href="#how">چطور کار می‌کنه</a>
+      <a href="#faq">سوالات</a>
+      <a href="#download" class="btn btn-main" style="padding:11px 22px;font-size:13.5px">دانلود APK</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <h1>تماس صوتی <span class="g en">گیمینگ</span><br>با دوستات — <span class="g">رایگان و امن</span></h1>
+    <p class="sub">اتاق خصوصی بساز، چت زنده کن، ری‌اکشن بفرست و با کیفیت بالا گپ بزن. بدون تبلیغات، بدون ثبت‌نام اضافه، فقط esy call.</p>
+    <div class="hero-cta">
+      <a href="#download" class="btn btn-main">⬇️ دانلود برنامه اندروید</a>
+      <a href="web.html" class="btn btn-ghost">📱 ورود از مرورگر — تماس زنده</a>
+    </div>
+    <div class="badges">
+      <span class="badge">🟢 تماس زنده</span>
+      <span class="badge">🔒 اتاق خصوصی</span>
+      <span class="badge">💬 چت + ری‌اکشن</span>
+      <span class="badge">⚡ بدون تبلیغات</span>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="p-notch"></div>
+        <div class="p-card">
+          <div class="p-row"><div class="p-av"></div><div style="flex:1"><div class="p-line" style="width:70%"></div><div class="p-line" style="width:45%;opacity:.5"></div></div></div>
+        </div>
+        <div class="p-mic">
+          <svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V22h2v-3.08A7 7 0 0 0 19 12h-2z"/></svg>
+        </div>
+        <div class="p-btns">
+          <div class="p-btn">🔊</div>
+          <div class="p-btn">💬</div>
+          <div class="p-btn end">📞</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="container">
+    <h2 class="sec-title">همه چیزی که لازم داری — <span class="g">یه جا</span></h2>
+    <p class="sec-sub">حرفه‌ای، سریع و با ظاهر گیمینگ</p>
+    <div class="grid">
+      <div class="f-card">
+        <div class="f-ico"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M5 12a7 7 0 0 0 14 0"/><path d="M12 19v3"/></svg></div>
+        <h3>تماس صوتی زنده</h3>
+        <p>با کیفیت و کم‌تاخیر، همزمان چند نفره. میکروفون، بلندگو و قطع تماس — همه جلوی چشمت.</p>
+      </div>
+      <div class="f-card">
+        <div class="f-ico"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+        <h3>اتاق خصوصی با رمز</h3>
+        <p>اتاق خودت رو با نام و رمز بساز. فقط کسی که نام و رمز رو داره وارد می‌شه — کاملاً جدا از اتاق عمومی.</p>
+      </div>
+      <div class="f-card">
+        <div class="f-ico"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/></svg></div>
+        <h3>چت زنده + ری‌اکشن</h3>
+        <p>کنار تماس، چت کن. به پیام‌ها جواب بده، ری‌اکشن بفرست و عکس پروفایل با کیفیت ببین.</p>
+      </div>
+      <div class="f-card">
+        <div class="f-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+        <h3>پروفایل حرفه‌ای</h3>
+        <p>عکس، ایموجی و بیوگرافی. پروفایل بقیه رو کامل ببین — عکس تمام‌صفحه با بهترین کیفیت.</p>
+      </div>
+      <div class="f-card">
+        <div class="f-ico"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+        <h3>سریع و سبک</h3>
+        <p>حجم کم، اجرای سریع، بدون تبلیغات و بدون ردیابی. تجربه‌ی تماس تمیز و بی‌دردسر.</p>
+      </div>
+      <div class="f-card">
+        <div class="f-ico"><svg viewBox="0 0 24 24"><path d="M12 2 3 7v6c0 5 3.8 8.5 9 9 5.2-.5 9-4 9-9V7l-9-5z"/><path d="m8.5 12 2.5 2.5 5-5"/></svg></div>
+        <h3>امن و خصوصی</h3>
+        <p>رمز اتاق‌ها سمت کاربره، سرور مخفیه و ارتباط رمزنگاری‌شده. خیالت از حریم خصوصی راحت.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how" style="background:rgba(12,18,38,.35);border-top:1px solid rgba(0,255,163,.1);border-bottom:1px solid rgba(0,255,163,.1)">
+  <div class="container">
+    <h2 class="sec-title">شروع کن — <span class="g">۳ قدم</span></h2>
+    <p class="sec-sub">از دانلود تا اولین تماس، کمتر از یک دقیقه</p>
+    <div class="steps">
+      <div class="step"><div class="num">۱</div><h4>دانلود و نصب</h4><p>فایل APK رو دانلود کن و روی گوشیت نصب کن.</p></div>
+      <div class="step"><div class="num">۲</div><h4>ثبت‌نام سریع</h4><p>یه نام کاربری و اسم انتخاب کن — تموم!</p></div>
+      <div class="step"><div class="num">۳</div><h4>تماس و اتاق</h4><p>یا «شروع تماس» بزن، یا اتاق خصوصی بساز و دوستت رو دعوت کن.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="download">
+  <div class="container">
+    <div class="dl-box">
+      <h2>آماده‌ای؟ <span class="g">esy call</span> رو نصب کن 🚀</h2>
+      <p>رایگان، بدون تبلیغات — اندروید از دانلود، آیفون از خود سایت</p>
+      <a href="esycall.apk" download class="btn btn-main" style="font-size:17px;padding:17px 40px">⬇️ دانلود مستقیم برنامه اندروید</a>
+      <br><br>
+      <a href="web.html" class="btn btn-ghost" style="font-size:15px;padding:15px 34px">📱 اندروید یا آیفون؟ از مرورگر وارد تماس شو</a>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="padding-top:20px">
+  <div class="container" style="max-width:760px">
+    <h2 class="sec-title">سوالات پرتکرار</h2>
+    <p class="sec-sub">جواب کوتاه، بی‌دردسر</p>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">رایگانه؟ <span class="pm">+</span></div>
+      <div class="faq-a">بله، کاملاً رایگان و بدون تبلیغات.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">اتاق خصوصی چطور کار می‌کنه؟ <span class="pm">+</span></div>
+      <div class="faq-a">یه نام اتاق و رمز انتخاب می‌کنی. دوستت همون نام و رمز رو می‌زنه و وارد اتاق تو می‌شه — هیچ‌کس دیگه‌ای نمی‌تونه وارد بشه.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">روی چه گوشی‌هایی کار می‌کنه؟ <span class="pm">+</span></div>
+      <div class="faq-a">اندروید ۶ به بالا. کافیه فایل APK رو نصب کنی.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">اطلاعات من امنه؟ <span class="pm">+</span></div>
+      <div class="faq-a">بله — رمز اتاق‌ها فقط سمت خودت و دوستته و ارتباط صوتی رمزنگاری‌شده‌ست.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo" style="justify-content:center"><span class="ring"><i></i></span><span class="g">esy call</span></div>
+    <div class="fl">
+      <a href="https://github.com/esrafilnazeri-png/voicecall-app">GitHub</a>
+      <a href="#features">امکانات</a>
+      <a href="#download">دانلود</a>
+    </div>
+    ساخته‌شده با ❤️ برای گفتگوی زنده — نسخه ۱۴ ⚡
+  </div>
+</footer>
+
+</body>
+</html>
